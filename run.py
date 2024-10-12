@@ -30,7 +30,7 @@ def get_full_commit_info(partial_commit_id):
     except Exception as e:
         try:
             for remote in repo.remotes:
-                remote.fetch(f'{commit_hash}:refs/remotes/origin/orphaned-commit')
+                remote.fetch(f'origin {commit_hash}:refs/remotes/origin/orphaned-commit')
             commit = repo.commit(partial_commit_id)
             return commit.hexsha, commit.message
         except Exception as e:
