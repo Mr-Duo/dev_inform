@@ -4,9 +4,9 @@ import os
 from git import Repo, GitCommandError
 
 # Regex to extract "Fixes: {commit_id}" pattern
-FIXES_REGEX = re.compile(r"(Fixes:) ([0-9a-z]{7,40})")
-UPSTREAM_REGEX = re.compile(r"([0-9a-z]{7,40}) upstream")
-UPSTREAM_REGEX2 = re.compile(r"upstream commit ([0-9a-z]{7,40})")
+FIXES_REGEX = re.compile(r"(Fixes:) ([0-9a-z]{7,40})",flags=re.IGNORECASE)
+UPSTREAM_REGEX = re.compile(r"([0-9a-z]{7,40}) upstream",flags=re.IGNORECASE)
+UPSTREAM_REGEX2 = re.compile(r"upstream commit ([0-9a-z]{7,40})",flags=re.IGNORECASE)
 repo_path = "../linux"
 repo = Repo(repo_path)
 
@@ -33,7 +33,7 @@ def get_full_commit_info(partial_commit_id):
 
 def extract_fixes_ids(message):
     """Extracts all commit IDs from the 'Fixes:' pattern in the message."""
-    match = FIXES_REGEX.findall(message if message else "", flags=re.IGNORECASE)
+    match = FIXES_REGEX.findall(message if message else "")
     if match:
         return [id for _, id in match] 
     else:
@@ -41,9 +41,9 @@ def extract_fixes_ids(message):
 
 def check_upstream(message):
     """Extracts all commit IDs from the 'Fixes:' pattern in the message."""
-    match = UPSTREAM_REGEX.search(message if message else "", flags=re.IGNORECASE)
+    match = UPSTREAM_REGEX.search(message if message else "")
     if match is None:
-        match = UPSTREAM_REGEX2.search(message if message else "", flags=re.IGNORECASE)
+        match = UPSTREAM_REGEX2.search(message if message else "")
     if match:
         return match.group(1)
     else:
