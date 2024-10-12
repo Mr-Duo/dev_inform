@@ -32,7 +32,7 @@ def get_full_commit_info(partial_commit_id):
 
 def extract_fixes_ids(message):
     """Extracts all commit IDs from the 'Fixes:' pattern in the message."""
-    match = FIXES_REGEX.search(message)
+    match = FIXES_REGEX.search(message if message else "")
     if match:
         return match.group(1)
     else:
@@ -40,7 +40,7 @@ def extract_fixes_ids(message):
 
 def check_upstream(message):
     """Extracts all commit IDs from the 'Fixes:' pattern in the message."""
-    match = UPSTREAM_REGEX.search(message)
+    match = UPSTREAM_REGEX.search(message if message else "")
     if match:
         return match.group(1)
     else:
