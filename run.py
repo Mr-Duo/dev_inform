@@ -68,14 +68,18 @@ def main(input_json, output_json):
                 continue 
             fixes_ids = extract_fixes_ids(commit_message)
             if fixes_ids:
+                fixes = []
                 for fix in fixes_ids:
-                    if len(fixes_ids) == 40:
+                    if len(fix) == 40:
+                        fixes.append(fix)
                         continue
                     else:
                         try:
                             fix, commit_message = get_full_commit_info(fixes_ids)
+                            fixes.append(fix)
                         except Exception as e:
                             pass
+                fixes_ids = fixes
                 
             upstream_id = check_upstream(commit_message)
             if upstream_id:
