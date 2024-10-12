@@ -76,7 +76,7 @@ def main(input_json, output_json):
                     else:
                         try:
                             fix, commit_message = get_full_commit_info(fixes_ids)
-                            fixes.append(fix)
+                            fixes.extend(fix)
                         except Exception as e:
                             pass
                 fixes_ids = fixes
