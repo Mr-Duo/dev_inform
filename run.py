@@ -4,7 +4,7 @@ import os
 from git import Repo, GitCommandError
 
 # Regex to extract "Fixes: {commit_id}" pattern
-FIXES_REGEX = re.compile(r"Fixes: ([0-9a-z]{7,40})")
+FIXES_REGEX = re.compile(r"(Fixes:) ([0-9a-z]{7,40})")
 UPSTREAM_REGEX = re.compile(r"commit ([0-9a-z]{7,40}) upstream\.")
 repo_path = "../linux"
 repo = Repo(repo_path)
@@ -32,7 +32,7 @@ def get_full_commit_info(partial_commit_id):
 
 def extract_fixes_ids(message):
     """Extracts all commit IDs from the 'Fixes:' pattern in the message."""
-    match = FIXES_REGEX.search(message if message else "")
+    match = FIXES_REGEX.findall(message if message else "")
     if match:
         return match.group(1)
     else:
@@ -42,7 +42,7 @@ def check_upstream(message):
     """Extracts all commit IDs from the 'Fixes:' pattern in the message."""
     match = UPSTREAM_REGEX.search(message if message else "")
     if match:
-        return match.group(1)
+        return [id for _, id in match]
     else:
         return None
 
@@ -68,18 +68,19 @@ def main(input_json, output_json):
                 continue 
             fixes_ids = extract_fixes_ids(commit_message)
             if fixes_ids:
-                if len(fixes_ids) == 40:
-                    continue
-                else:
-                    try:
-                        fixes_ids, commit_message = get_full_commit_info(fixes_ids)
-                    except Exception as e:
-                        pass
+                for fix in fixes_ids:
+                    if len(fixes_ids) == 40:
+                        continue
+                    else:
+                        try:
+                            fix, commit_message = get_full_commit_info(fixes_ids)
+                        except Exception as e:
+                            pass
                 
             upstream_id = check_upstream(commit_message)
             if upstream_id:
                 full_commit_id, commit_message = get_full_commit_info(upstream_id)
-            results.append({"VFC": full_commit_id if full_commit_id else partial_commit_id, "VIC": [fixes_ids] if fixes_ids else [""]})
+            results.append({"VFC": full_commit_id if full_commit_id else partial_commit_id, "VIC": fixes_ids if fixes_ids else [""]})
             print(f"upstream {full_commit_id} fixes {fixes_ids}")
         else:
             print("not found")
