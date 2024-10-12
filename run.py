@@ -6,7 +6,7 @@ from git import Repo, GitCommandError
 # Regex to extract "Fixes: {commit_id}" pattern
 FIXES_REGEX = re.compile(r"Fixes: ([0-9a-z]{7,40})")
 UPSTREAM_REGEX = re.compile(r"commit ([0-9a-z]{7,40}) upstream\.")
-repo_path = "/kaggle/working/linux"
+repo_path = "../linux"
 repo = Repo(repo_path)
 
 def load_commit_ids(json_file):
