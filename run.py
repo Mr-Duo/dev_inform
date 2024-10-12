@@ -28,13 +28,7 @@ def get_full_commit_info(partial_commit_id):
         commit = repo.commit(partial_commit_id)
         return commit.hexsha, commit.message
     except Exception as e:
-        try:
-            for remote in repo.remotes:
-                remote.fetch(f'origin {commit_hash}:refs/remotes/origin/orphaned-commit')
-            commit = repo.commit(partial_commit_id)
-            return commit.hexsha, commit.message
-        except Exception as e:
-            return None
+        return partial_commit_id, None
 
 def extract_fixes_ids(message):
     """Extracts all commit IDs from the 'Fixes:' pattern in the message."""
@@ -62,13 +56,16 @@ def main(input_json, output_json):
 
     results = []  # List to store output data
     side = []
-
+    fetch = []
     # Process each commit ID
     for partial_commit_id in commit_ids:
         print(partial_commit_id)
         result = get_full_commit_info(partial_commit_id)
         if result:
             full_commit_id, commit_message = result
+            if commit_message is None:
+                fetch.append(full_commit_id)   
+                continue 
             fixes_ids = extract_fixes_ids(commit_message)
             if fixes_ids:
                 if len(fixes_ids) == 40:
@@ -94,6 +91,8 @@ def main(input_json, output_json):
             json.dump(results, f, indent=4)
         with open("side.json", 'w') as f:
             json.dump(side, f, indent=4)
+        with open("fetch.json", 'w') as f:
+            json.dump(fetch, f, indent=4)
         print(f"Results saved to {output_json}")
     except Exception as e:
         print(f"Error writing to output JSON: {e}")
