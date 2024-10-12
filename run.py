@@ -42,12 +42,14 @@ def extract_fixes_ids(message):
 def check_upstream(message):
     """Extracts all commit IDs from the 'Fixes:' pattern in the message."""
     match = UPSTREAM_REGEX.search(message if message else "")
-    if not match:
-        match = UPSTREAM_REGEX2.search(message if message else "")
     if match:
         return match.group(1)
     else:
-        return None
+        match = UPSTREAM_REGEX2.search(message if message else "")
+        if match:
+            return match.group(1)
+        else:
+            return None
 
 def main(input_json, output_json):
     # Load partial commit IDs from the input JSON file
