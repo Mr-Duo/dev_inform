@@ -29,8 +29,7 @@ def get_full_commit_info(partial_commit_id):
         return commit.hexsha, commit.message
     except Exception as e:
         try:
-            os.system(f"git fetch origin {partial_commit_id}:refs/remotes/origin/orphaned-commit")
-            repo = Repo(repo_path)
+            repo.git.update_ref(f'refs/remotes/origin/orphaned-commit', commit_hash)
             commit = repo.commit(partial_commit_id)
             return commit.hexsha, commit.message
         except Exception as e:
@@ -70,8 +69,14 @@ def main(input_json, output_json):
         if result:
             full_commit_id, commit_message = result
             fixes_ids = extract_fixes_ids(commit_message)
-            if fixes_ids is not None:
-                fixes_ids, commit_message = get_full_commit_info(fixes_ids)
+            if fixes_ids:
+                if len(fixes_ids) == 40:
+                    continue
+                else:
+                    try:
+                        fixes_ids, commit_message = get_full_commit_info(fixes_ids)
+                    except Exception as e:
+                        pass
                 
             upstream_id = check_upstream(commit_message)
             if upstream_id:
