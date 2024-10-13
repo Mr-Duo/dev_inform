@@ -63,6 +63,8 @@ def main(input_json, output_json):
     for partial_commit_id in commit_ids:
         print(partial_commit_id)
         result = get_full_commit_info(partial_commit_id)
+        if partial_commit_id == "c49f320e2492738d478bc427dcd54ccfe0cba746":
+            print(result)
         if result:
             full_commit_id, commit_message = result
             if commit_message is None:
