@@ -6,7 +6,7 @@ from git import Repo, GitCommandError
 # Regex to extract "Fixes: {commit_id}" pattern
 FIXES_REGEX = re.compile(r"(Fixes:) ([0-9a-z]{7,40})",flags=re.IGNORECASE)
 UPSTREAM_REGEX = re.compile(r"commit\s*([0-9a-z]{7,40})\s*upstream",flags=re.IGNORECASE)
-UPSTREAM_REGEX2 = re.compile(r"Upstream\s+commit\s+([a-z0-9]{7,40})",flags=re.IGNORECASE)
+UPSTREAM_REGEX2 = re.compile(r"\[\s*Upstream\s*commit\s*([0-9a-z]{7,40})\s*\]",flags=re.IGNORECASE)
 repo_path = "../linux"
 repo = Repo(repo_path)
 
