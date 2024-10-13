@@ -82,7 +82,10 @@ def main(input_json, output_json):
                         except Exception as e:
                             pass
                 fixes_ids = fixes
-                
+            
+            if full_commit_id == "c49f320e2492738d478bc427dcd54ccfe0cba746":
+                print(commit_message)
+            
             upstream_id = check_upstream(commit_message)
             print(upstream_id)
             if upstream_id:
