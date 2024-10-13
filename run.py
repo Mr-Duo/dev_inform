@@ -86,6 +86,7 @@ def main(input_json, output_json):
                 fixes_ids = fixes
                 
             upstream_id = check_upstream(commit_message, full_commit_id)
+            print(upstream_id)
             if upstream_id != full_commit_id:
                 full_commit_id = None
                 full_commit_id, commit_message = get_full_commit_info(upstream_id)
