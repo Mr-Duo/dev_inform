@@ -63,8 +63,6 @@ def main(input_json, output_json):
     for partial_commit_id in commit_ids:
         print(partial_commit_id)
         result = get_full_commit_info(partial_commit_id)
-        if partial_commit_id == "c49f320e2492738d478bc427dcd54ccfe0cba746":
-            print(result)
         if result:
             full_commit_id, commit_message = result
             if commit_message is None:
@@ -79,14 +77,11 @@ def main(input_json, output_json):
                         continue
                     else:
                         try:
-                            fix, commit_message = get_full_commit_info(fix)
+                            fix, fix_message = get_full_commit_info(fix)
                             fixes.append(fix)
                         except Exception as e:
                             pass
                 fixes_ids = fixes
-            
-            if full_commit_id == "c49f320e2492738d478bc427dcd54ccfe0cba746":
-                print(commit_message)
             
             upstream_id = check_upstream(commit_message)
             print(upstream_id)
