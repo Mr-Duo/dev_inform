@@ -86,9 +86,14 @@ def main(input_json, output_json):
             upstream_id = check_upstream(commit_message)
             print(upstream_id)
             if upstream_id:
-                full_commit_id = None
-                full_commit_id, commit_message = get_full_commit_info(upstream_id)
-            results.append({"VFC": full_commit_id if full_commit_id else partial_commit_id, "VIC": fixes_ids if fixes_ids else []})
+                upstream_id, commit_message = get_full_commit_info(upstream_id)
+            results.append(
+                {
+                    "VFC": upstream_id if upstream_id else full_commit_id, 
+                    "VIC": fixes_ids if fixes_ids else [],
+                    "origina": full_commit_id if upstream_id else ""
+                }
+                )
             print(f"upstream {full_commit_id} fixes {fixes_ids}")
         else:
             print("not found")
