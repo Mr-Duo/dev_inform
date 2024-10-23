@@ -3,10 +3,13 @@ import json
 with open("output.json", "r") as f:
     all = json.load(f)
     
+
+unique_data = {d["VFC"]: d for d in all}.values()
+all = list(unique_data)
+
 yes, no = [], []
 for line in all:
-    if line["VIC"][0] == "":
-        line["VIC"] = []
+    if len(line["VIC"]) == 0:
         no.append(line)
     else:
         yes.append(line)

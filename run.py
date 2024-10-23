@@ -113,7 +113,7 @@ def main(input_json, output_json):
 
 # Example usage
   # Replace with your local repo path
-input_json = "linux_dump.json"  # Input JSON file containing partial commit IDs
-output_json = "output.json"  # Output JSON file to save the results
+input_json = "all_filtered.json"  # Input JSON file containing partial commit IDs
+output_json = "output2.json"  # Output JSON file to save the results
 
 main(input_json, output_json)
